@@ -1,7 +1,222 @@
-<mvc:View controllerName="project1.controller.Worklist"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+<mvc:View controllerName="sls.jbd.jbbpo.slsjbdasmjbppoemp.controller.worklistView" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+	xmlns:footerbar="sap.ushell.ui.footerbar" xmlns:fb="sap.ui.comp.filterbar" xmlns:l="sap.ui.layout" xmlns:gt="sap.ui.table"
+	xmlns:core="sap.ui.core">
+	<Page title="Job Posting Application Portal" titleAlignment="Center">
+		<content>
+			<!--KPI-->
+			<VBox visible="false">
+				<HeaderContainer scrollStep="200">
+					<GenericTag text="{i18n>pendingpublish} :" design="StatusIconHidden" status="Information">
+						<ObjectNumber state="Information" emphasized="false" number="{oGlobalModel>/oLandingKPI/PendingPublish}"/>
+					</GenericTag>
+					<GenericTag text="{i18n>published} :" design="StatusIconHidden" status="Information">
+						<ObjectNumber state="Information" emphasized="false" number="{oGlobalModel>/oLandingKPI/Pending}"/>
+					</GenericTag>
+					<GenericTag text="{i18n>closedbid} :" design="StatusIconHidden" status="Error">
+						<ObjectNumber state="Error" emphasized="false" number="{oGlobalModel>/oLandingKPI/ClosedforBidding}"/>
+					</GenericTag>
+					<GenericTag text="{i18n>close} :" design="StatusIconHidden" status="Information">
+						<ObjectNumber state="Information" emphasized="false" number="{oGlobalModel>/oLandingKPI/Closed}"/>
+					</GenericTag>
+				</HeaderContainer>
+			</VBox>
+			<VBox class="sapUiSmallMargin">
+				<!-- FilterBar -->
+				<l:VerticalLayout width="100%">
+					<fb:FilterBar reset="onReset" search="onSearchFilters" showGoOnFB="true" clear="onClearFilter" showClearOnFB="true"
+						filterContainerWidth="11rem" useToolbar="false" id="filterBar">
+						<fb:filterGroupItems>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="group1" name="filter1" label="{i18n>JobPosting}">
+								<fb:control>
+									<Input showValueHelp="true"
+										valueHelpRequest="onOpenCommonFrag($event,'idJobPosting','oJobPost','fragments','JobPostingFragment','oFilter/JBPNM','gsegaurfsfawr47e')"
+										value="{worklistView>/oFilter/JBPNM}" valueHelpOnly="true"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="group2" name="filter2" label="{i18n>JobPostingStatus}">
+								<fb:control>
+									<Select forceSelection="false" selectedKey="{worklistView>/oFilter/JBPST}"
+										items="{path:'/zXSAh7ERN5XAQerC', filters :[{ path : 'TYVAL', operator : 'EQ', value1 : 'Job Posting Status'}], sorter: { path: 'TXVAL', descending: false }}">
+										<core:Item key="{UNQID}" text="{TXVAL}" enabled="{= ['5','6','7'].indexOf(${UNQID}) > -1 }"/>
+									</Select>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="group3" name="filter3" label="{i18n>OpenDate}">
+								<fb:control>
+									<DatePicker value="{worklistView>/oFilter/OPNDT_T}" id="openDatePicker" displayFormat="MM/dd/yyyy" valueFormat="yyyy-MM-dd"
+										placeholder="MM/dd/yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="group4" name="filter4" label="{i18n>ClosedDate}">
+								<fb:control>
+									<DatePicker value="{worklistView>/oFilter/CLSDT_T}" id="closedDatePicker" displayFormat="MM/dd/yyyy" valueFormat="yyyy-MM-dd"
+										placeholder="MM/dd/yyyy"/>
+								</fb:control>
+							</fb:FilterGroupItem>
+							<fb:FilterGroupItem visibleInFilterBar="true" groupName="group5" name="filter5" label="{i18n>ApplicantStatus}" visible="{= ${worklistView>/sKey} === '1' ? true : false}">
+								<fb:control>
+									<Select forceSelection="false" selectedKey="{worklistView>/oFilter/APLST}" id="ApplicantStatus"
+										items="{path:'/zXSAh7ERN5XAQerC', filters :[{ path : 'TYVAL', operator : 'EQ', value1 : 'Applicant Status'}], sorter: { path: 'TXVAL', descending: false }}">
+										<core:Item key="{UNQID}" text="{TXVAL}"/>
+									</Select>
+								</fb:control>
+							</fb:FilterGroupItem>
+						</fb:filterGroupItems>
+						<!--</fb:FilterBar>-->
+					</fb:FilterBar>
+				</l:VerticalLayout>
+				<IconTabBar id="idIconTabBar" expandable="false" class="sapUiTinyMarginTop" selectedKey="{worklistView>/sKey}" select="onSelectIconTabBar">
+					<items>
+						<!-- Optionals Table Tab -->
+						<IconTabFilter iconColor="Critical" icon="sap-icon://action" design="Horizontal" key="1" text="{i18n>Optionals}" tooltip="Optionals">
+							<gt:Table id="OptionalsTable" selectionMode="None"
+								rows="{path:'/gsegaurfsfawr47e', parameters: { expand: 'OMAhzs10OGTlxZIU' }, filters :{ path : '1', operator : 'EQ', value1 : 'TYPST'} ,sorter:{path:'JBPNM',descending: true}}" visibleRowCount="auto" enableBusyIndicator="true" fixedColumnCount="1">
+								<gt:extension>
+									<Toolbar>
+										<content>
+											<ToolbarSpacer/>
+											<Button icon="sap-icon://action-settings" type="Emphasized" press="onPressSettingButton" tooltip="{i18n>Settings}"/>
+											<Button icon="sap-icon://excel-attachment" type="Accept" press="onPressExport('OptionalsTable', ${i18n>Optionals} )" tooltip="{i18n>ExportData}"/>
+										</content>
+									</Toolbar>
+								</gt:extension>
+								<gt:rowSettingsTemplate>
+                                    <gt:RowSettings highlight="{= ${JBPST} === '6' ? 'Error' : 'None'}"/>
+                                </gt:rowSettingsTemplate>
+								<gt:columns>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobPosting}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Link text="{JBPNM}" press="_showObject"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobPostingStatus}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{JBPST_TXT}"/>
+										</gt:template>
+									</gt:Column>
+									<!-- <gt:Column autoResizable="true">
+										<Label text="{i18n>OpenDate}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{OPNDT}"/>
+										</gt:template>
+									</gt:Column> -->
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>OpenDate}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{ path: 'OPNDT_T', formatter: '.formatter.toMMddYY' }"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>OpenTime}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{OPNTM_T}"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>ClosedDate}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{ path: 'CLSDT_T', formatter: '.formatter.toMMddYY' }"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>CloseTime}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{CLSTM_T}"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>ApplicantStatus}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{APLST_TXT}"/>
+										</gt:template>
+									</gt:Column>
+									<!-- <gt:Column autoResizable="true">
+										<Label text="{i18n>CycleChartPDF}" design="Bold" wrapping="true" textAlign="Center"/>
+										<gt:template>
+											<Link text="{TMPLT}"/>
+										</gt:template>
+									</gt:Column> -->
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobDescription}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<!-- <Link text="{STMPT}" press="onJobDescription"/> -->
+											<Button class="sapUiMediumTopMargin sapUiMediumMarginBegin" icon="sap-icon://attachment" type="Transparent" text="" tooltip="{i18n>attachment}" press="onPressAttachIcon($event,${OMAhzs10OGTlxZIU/__list})" visible="{= ${OMAhzs10OGTlxZIU/__list}.length > 0}"/>
+										</gt:template>
+									</gt:Column>
+								</gt:columns>
+							</gt:Table>
+						</IconTabFilter>
+						<!-- Monthly Bulletin Table Tab -->
+						<IconTabFilter iconColor="Default" icon="sap-icon://check-availability" design="Horizontal" key="2" text="{i18n>MonthlyBulletin}">
+							<gt:Table selectionMode="None" id="MonthlyBulletinTable"
+								rows="{path:'/gsegaurfsfawr47e', parameters: { expand: 'OMAhzs10OGTlxZIU' }, filters :{ path : '2', operator : 'EQ', value1 : 'TYPST'}, sorter:{path:'JBPNM',descending: true}}" visibleRowCount="auto" enableBusyIndicator="true" fixedColumnCount="1">
+								<gt:extension>
+									<Toolbar>
+										<content>
+											<ToolbarSpacer/>
+											<Button icon="sap-icon://action-settings" type="Emphasized" press="onPressSettingButton" tooltip="{i18n>Settings}"/>
+											<Button icon="sap-icon://excel-attachment" type="Accept" press="onPressExport('MonthlyBulletinTable', ${i18n>MonthlyBulletin} " tooltip="{i18n>ExportData}"/>
+										</content>
+									</Toolbar>
+								</gt:extension>
+								<gt:columns>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobPosting}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Link text="{JBPNM}" press="_showObject"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobPostingStatus}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{JBPST_TXT}"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>OpenDate}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{ path: 'OPNDT_T', formatter: '.formatter.toMMddYY' }"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>OpenTime}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{OPNTM_T}"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>ClosedDate}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{ path: 'CLSDT_T', formatter: '.formatter.toMMddYY' }"/>
+										</gt:template>
+									</gt:Column>
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>CloseTime}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Text text="{CLSTM_T}"/>
+										</gt:template>
+									</gt:Column>
+									<!-- <gt:Column autoResizable="true">
+										<Label text="{i18n>CycleChartPDF}" design="Bold" wrapping="true" textAlign="Center"/>
+										<gt:template>
+											<Link text="{CycleChartPDF}"/>
+										</gt:template>
+									</gt:Column> -->
+									<gt:Column autoResizable="true">
+										<Label text="{i18n>JobDescription}" design="Bold" textAlign="Center" wrapping="true"/>
+										<gt:template>
+											<Button class="sapUiMediumTopMargin sapUiMediumMarginBegin" icon="sap-icon://attachment" type="Transparent" text="" tooltip="{i18n>attachment}" press="onPressAttachIcon($event,${OMAhzs10OGTlxZIU/__list})" visible="{= ${OMAhzs10OGTlxZIU/__list}.length > 0}"/>
+										</gt:template>
+									</gt:Column>
+								</gt:columns>
+							</gt:Table>
+                            
+						</IconTabFilter>
+					</items>
+				</IconTabBar>
+			</VBox>
+		</content>
+	</Page>
 </mvc:View>
