@@ -1,0 +1,24 @@
+{
+  "generationParameters": {
+    "generationDate": "Tue Jul 01 2025 13:29:28 GMT+0000 (Coordinated Universal Time)",
+    "generatorPlatform": "SAP Business Application Studio",
+    "serviceType": "SAP System (ABAP On Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "https://cok--sodales-solutions-inc--scd-configuration-cok-hx9y01f0a92bc.cfapps.ca10.hana.ondemand.com/odata/v2/main",
+    "appName": "project2",
+    "appTitle": "App Title",
+    "appDescription": "An SAP Fiori application.",
+    "appNamespace": "com.project2",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.120.32",
+    "enableCodeAssist": false,
+    "enableEslint": false,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.18.1",
+    "template": "Basic V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "In order to launch the generated app, simply run the following from the generated app root folder:\n\n```\n    npm start\n```"
+  }
+}
